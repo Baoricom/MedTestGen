@@ -11,7 +11,7 @@ Scope, PRD, specification and mappings are approved. Stage 4-spec is complete. N
 
 ## Slices
 
-- [ ] **1. Generate and independently check a synthetic CT study**
+- [x] **1. Generate and independently check a synthetic CT study**
   Becomes usable: A runnable synthetic CT generation and validation probe produces 1–10 instances in RAM and shows real per-instance findings without exporting unchecked data.
   Why now: CT correctness and Windows validator lifecycle are the largest approved technical risks; this slice leaves runnable evidence before integrating the other standards. Bootstrap is included here.
   PRD ref: `prd.md > Imaging Study and CT Output`, `prd.md > Validation Reporting`
@@ -21,7 +21,7 @@ Scope, PRD, specification and mappings are approved. Stage 4-spec is complete. N
   Learner check: Run the documented diagnostic command and inspect a five-slice study's UIDs and per-instance validation report; confirm the CT output profile matches the intended test use.
   Commit: `Implement synthetic CT generation and qualified Windows validation`
 
-- [ ] **2. Generate one linked DICOM, HL7 and FHIR dataset**
+- [x] **2. Generate one linked DICOM, HL7 and FHIR dataset**
   Becomes usable: A single scenario produces the three standard-specific outputs with readable diagnostic summaries and independent consistency results.
   Why now: Proves One Patient, Three Standards early, immediately after the CT risk is qualified.
   PRD ref: `prd.md > Linked HL7 and FHIR Outputs`, `prd.md > Validation Reporting`
@@ -72,4 +72,4 @@ Edit outcome: Not yet offered.
 Reflection: Not yet offered; personal reflection belongs in the ignored learner profile.
 Activity mode: Planned live app and code walkthrough after final revisions.
 
-## Revisions
+## Revisions- hl7apy 1.3.5 treats ORM order-detail alternatives as simultaneously required. Narrow its reference choice to the approved OBR branch before validation; preserve group/field validation and add missing-OBR/procedure regressions. No stack, output or scope change.

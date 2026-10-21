@@ -330,3 +330,7 @@ The genuine technical uncertainty raised by the learner was whether the validato
 Historical PoC reports remain unchanged as experiment records; their earlier “proposal only” wording is superseded for the selected exception by this specification and the learner's approval. Pending build qualifications include dependency imports, full CT attribute checklist, all-instance external runs, robust diagnostic parsing, live-child lifecycle cleanup and actual memory measurements. No unresolved product scope expansion is proposed.
 
 Markdown is used for this review because no alternate review format has been selected. Full-document approval has been received. Proceed to the official 5-build workflow.
+
+### Build-discovered internal correction
+
+- hl7apy 1.3.5 treats ORM order-detail alternatives as simultaneously required. Narrow its reference choice to the approved OBR branch before validation; preserve group/field validation and add missing-OBR/procedure regressions. No stack, output or scope change.
