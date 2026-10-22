@@ -33,3 +33,13 @@ The tests exercise the 30-minute TTL boundary, automatic cleanup, owner-scoped 4
 An actual ten-instance API request returned HTTP 201. DICOM readback, HL7, FHIR and consistency were PASSED; the external aggregate was PASSED. The ZIP returned HTTP 200, contained thirteen entries (ten DICOM files plus HL7, FHIR and manifest), and `ZipFile.testzip()` returned no corrupt member. The retained record accounted for 5,318,691 bytes. `tracemalloc` observed a 27,376,567-byte peak, below the 64 MiB generation reservation. This is not a whole-process RSS guarantee.
 
 The backend re-evaluates export eligibility on each download. It never exposes a raw DICOM artifact route. Main payloads, ZIP and reports remain in RAM. The only disk-backed generated content remains the approved one-at-a-time validator file.
+
+## Slice 4
+
+Final automated regression: 108 passed in 16.29 seconds with no skipped tests; `pip check` found no broken requirements and `node --check medtestgen/static/app.js` succeeded. The same two non-failing environment warnings remained: Starlette TestClient deprecation and unavailable optional pytest cache writes.
+
+The local app was started with the documented single-worker Uvicorn command and exercised through a real browser. The prefilled five-slice form generated a result showing Required Checks Passed. DICOM readback, HL7 structure, FHIR R4, cross-standard consistency and the independent CT IOD aggregate each visibly showed PASSED. The DICOM tab displayed a phantom and five distinct SOP Instance UIDs with coherent slice positions. The HL7 tab displayed MSH/PID/PV1/ORC/OBR, and the FHIR tab displayed Patient, ServiceRequest and ImagingStudy with resolved UUID references and five instances.
+
+The browser Download ZIP action was invoked. Archive membership and integrity were independently verified in the same five-slice HTTP journey: five DICOM files, `hl7/ORM_O01.hl7`, `fhir/bundle.json`, and `manifest.json`; CRC passed and manifest dataset identity matched. Reloading the page restored the same active result through `sessionStorage`. Submitting 11 slices produced an actionable 422 field message without traceback and did not destroy the active result.
+
+Visual inspection confirmed the light responsive layout, status labels, validation cards, tabs, phantom preview and download action at the desktop viewport. CSS breakpoints and semantic/keyboard hooks have automated checks; a physical Windows 11/mobile-device run remains unverified and does not block the approved Windows 10 MVP.

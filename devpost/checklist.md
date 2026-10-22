@@ -41,7 +41,7 @@ Scope, PRD, specification and mappings are approved. Stage 4-spec is complete. N
   Learner check: Use the documented API demonstration to inspect a valid ZIP and an explicitly denied failed candidate; confirm previous valid data remains available until its original expiry.
   Commit: `Enforce RAM retention atomic replacement and validated ZIP export`
 
-- [ ] **4. Complete the browser generator and diagnostic workflow**
+- [x] **4. Complete the browser generator and diagnostic workflow**
   Becomes usable: The approved prefilled web interface generates a dataset, previews DICOM/HL7/FHIR, explains validation results and downloads the gated ZIP.
   Why now: Connects the proven core and backend policy to the complete user journey without hiding missing functionality behind UI.
   PRD ref: `prd.md > The Core Journey`, `prd.md > Dataset Generator`, `prd.md > Result Panel`, `prd.md > Output Inspection`, `prd.md > Look and Feel`

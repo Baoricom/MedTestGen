@@ -4,7 +4,7 @@ One Patient. Three Standards. Consistent Test Data.
 
 Synthetic Data — Not for Clinical Use.
 
-Implementation is in progress. Slices 1 and 2 are implemented: the runnable entry points generate CT alone or linked DICOM/HL7/FHIR in RAM. The web application, retained dataset API and ZIP export are not implemented yet. Main generated payloads remain in RAM. Only the approved validator method A uses a temporary seekable DICOM file. No real medical data is used.
+The P0 implementation is complete and awaiting final learner review. The browser application generates linked CT DICOM, HL7 ORM^O01 and FHIR R4 data, reports actual validation outcomes, retains results in RAM and exports only eligible datasets. Main generated payloads remain in RAM. Only the approved validator method A uses one temporary seekable DICOM file at a time. No real medical data is used.
 
 ## Windows setup
 
@@ -17,10 +17,10 @@ py -3.10 -m venv .venv
 & .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt -r requirements-validator.txt
 & .\.venv\Scripts\python.exe -m pip check
 & .\.venv\Scripts\python.exe -m pytest
-& .\.venv\Scripts\python.exe -m medtestgen.ct_probe --slices 5
+& .\.venv\Scripts\python.exe -m uvicorn medtestgen.main:app --host 127.0.0.1 --port 8000 --workers 1 --no-access-log
 ```
 
-The probe prints synthetic identifiers and actual validation findings explicitly requested for inspection. Application logging must not retain payloads. No DICOM file or ZIP is written to the project.
+Open http://127.0.0.1:8000. Keep this PowerShell window open while using the application. Do not enable Uvicorn reload for a demonstration because a restart clears RAM datasets. Application logging does not retain payloads. The ZIP is assembled in RAM and sent to the browser; the server does not save it in the project.
 
 ## Validation limitations
 
@@ -43,6 +43,12 @@ HL7 validation uses hl7apy's original field/group definitions with the order-det
 
 ## Stage 3 API
 
-The backend now retains datasets in RAM for 30 minutes, enforces atomic replacement and rechecks validation before every ZIP response. The final browser entry point is added in Stage 4. API tests use FastAPI's in-process client; generated ZIP files are not written to the project.
+The backend retains datasets in RAM for 30 minutes, enforces atomic replacement and rechecks validation before every ZIP response. API tests use FastAPI's in-process client; generated ZIP files are not written to the project.
 
 The application must run as one Uvicorn worker. Multiple workers would create separate RAM stores and are outside the approved MVP architecture.
+
+## Browser workflow
+
+The form starts with synthetic values and a five-slice CT Head study. Generate Dataset creates and validates all three standards. The result tabs show a phantom preview and DICOM identifiers, the serialized ORM message, and formatted FHIR JSON. Download ZIP is enabled only when the backend export predicate permits it. The active `dataset_id` is retained in `sessionStorage`; refreshing the same tab restores an unexpired result.
+
+If mandatory validation or confirmed CT IOD conformance fails, diagnostics remain visible and ZIP stays blocked. An unavailable external validator is shown as NOT VERIFIED with an explicit limitation; it is not reported as PASSED.

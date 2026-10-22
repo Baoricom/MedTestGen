@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Generate consistent synthetic DICOM, HL7 and FHIR test datasets.">
+  <title>MedTestGen — Synthetic Healthcare Test Data</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="MedTestGen home"><span class="brand-mark" aria-hidden="true">M+</span><span>MedTestGen</span></a>
+    <span class="safety-badge">Synthetic Data — Not for Clinical Use</span>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Healthcare interoperability toolkit</p>
+      <h1 id="page-title">One Patient. Three Standards.<br><span>Consistent Test Data.</span></h1>
+      <p class="hero-copy">Generate synthetic DICOM, HL7 and FHIR datasets for healthcare interoperability testing.</p>
+    </section>
+    <section class="generator card" aria-labelledby="generator-title">
+      <div class="section-heading"><div><p class="step">Dataset Generator</p><h2 id="generator-title">Configure a synthetic CT scenario</h2></div><button id="randomize" class="secondary" type="button">Randomize Patient</button></div>
+      <form id="generator-form" novalidate>
+        <div class="form-sections">
+          <fieldset>
+            <legend><span>01</span> Patient Information</legend>
+            <label>Patient Name <small>Family^Given</small><input id="patient-name" name="patient_name" autocomplete="off" required maxlength="64" placeholder="SYNTHETIC^ALEX"></label>
+            <div class="field-row"><label>Patient ID / MRN<input id="mrn" name="mrn" autocomplete="off" required maxlength="64"></label><label>Date of Birth<input id="birth-date" name="birth_date" type="date" required></label></div>
+            <label>Sex<select id="sex" name="sex"><option value="M">Male</option><option value="F">Female</option><option value="O">Other</option><option value="U">Unknown</option></select></label>
+          </fieldset>
+          <fieldset>
+            <legend><span>02</span> Imaging Study</legend>
+            <div class="field-row"><label>Modality<input value="CT" readonly></label><label>SOP Class<input value="CT Image Storage" readonly></label></div>
+            <label>Study Description<input id="description" name="description" required maxlength="64"></label>
+            <label>Accession Number<input id="accession" name="accession" required maxlength="16"></label>
+            <div class="field-row"><label>Number of Slices<input id="slices" name="slices" type="number" min="1" max="10" step="1" required></label><label>Image Resolution<input value="512 × 512" readonly></label></div>
+          </fieldset>
+        </div>
+        <div id="form-errors" class="message error" role="alert" hidden></div>
+        <button id="generate" class="primary" type="submit"><span class="button-label">Generate Dataset</span><span class="spinner" aria-hidden="true"></span></button>
+      </form>
+    </section>
+    <section id="results" class="results card" aria-labelledby="results-title" hidden>
+      <div class="result-header"><div><p class="step">Generation Result</p><h2 id="results-title">Linked interoperability dataset</h2><p id="dataset-summary" class="muted"></p></div><div id="overall-status" class="status" aria-live="polite"></div></div>
+      <div id="validation-summary" class="validation-grid"></div>
+      <div id="validation-warning" class="message warning" hidden></div>
+      <div id="validation-findings" class="findings"></div>
+      <div class="tabs" role="tablist" aria-label="Generated standards">
+        <button role="tab" aria-selected="true" aria-controls="dicom-panel" id="dicom-tab">DICOM</button>
+        <button role="tab" aria-selected="false" aria-controls="hl7-panel" id="hl7-tab">HL7</button>
+        <button role="tab" aria-selected="false" aria-controls="fhir-panel" id="fhir-tab">FHIR</button>
+      </div>
+      <section id="dicom-panel" class="tab-panel" role="tabpanel" aria-labelledby="dicom-tab"><div class="dicom-layout"><canvas id="phantom" width="512" height="512" aria-label="Synthetic CT phantom preview"></canvas><div id="dicom-list" class="instance-list"></div></div></section>
+      <section id="hl7-panel" class="tab-panel" role="tabpanel" aria-labelledby="hl7-tab" hidden><pre id="hl7-preview"></pre></section>
+      <section id="fhir-panel" class="tab-panel" role="tabpanel" aria-labelledby="fhir-tab" hidden><pre id="fhir-preview"></pre></section>
+      <div class="result-actions"><button id="previous-result" class="secondary" type="button" hidden>Back to Previous Valid Result</button><button id="download" class="primary compact" type="button">Download ZIP</button></div>
+    </section>
+  </main>
+  <footer><span>MedTestGen MVP</span><span>DICOM CT · HL7 v2.5.1 · FHIR R4</span></footer>
+</body>
+</html>
