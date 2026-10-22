@@ -43,3 +43,13 @@ The local app was started with the documented single-worker Uvicorn command and 
 The browser Download ZIP action was invoked. Archive membership and integrity were independently verified in the same five-slice HTTP journey: five DICOM files, `hl7/ORM_O01.hl7`, `fhir/bundle.json`, and `manifest.json`; CRC passed and manifest dataset identity matched. Reloading the page restored the same active result through `sessionStorage`. Submitting 11 slices produced an actionable 422 field message without traceback and did not destroy the active result.
 
 Visual inspection confirmed the light responsive layout, status labels, validation cards, tabs, phantom preview and download action at the desktop viewport. CSS breakpoints and semantic/keyboard hooks have automated checks; a physical Windows 11/mobile-device run remains unverified and does not block the approved Windows 10 MVP.
+
+## Shipping Verification
+
+On 2026-10-22 a clean copy was created outside the development checkout with a new Python 3.10 x64 virtual environment. Dependencies were installed from `requirements-dev.txt` and `requirements-validator.txt`; `pip check` reported no broken requirements. The documented validator locator returned dicom3tools version `20260927`, the bundled `dciodvfy.exe`, and the qualified SHA-256 digest `7f42d1d165d4f8d4e436d863501a6c8c50987b671d7f5c2fe83c662a227cd14b`.
+
+The clean environment ran the full suite: 108 passed, no skips, in 16.76 seconds. The only warning was Starlette TestClient's upstream AnyIO alias deprecation. A separate five-slice CLI run produced PASSED for DICOM readback, HL7, FHIR, cross-standard consistency and all five independent dciodvfy instance checks; every validator result reported `cleanup_ok=true` and `child_reaped=true`.
+
+Focused export-policy regressions ran separately: 20 passed. They cover TTL expiry and 410/404 behavior, Atomic Replacement and failed-candidate rollback, concurrent generation admission, direct ZIP API enforcement, memory reservation/release, exact archive membership, CRC and manifest hashes.
+
+The shipping audit found no tracked generated DICOM/ZIP files, secrets, credential files, or unrelated binary artifacts. The private learner profile and planning-only validator research are ignored for public publication. Existing Git commits contain the configured author name and email; public publishing remains blocked until the learner explicitly accepts that disclosure or approves a history-remediation approach.

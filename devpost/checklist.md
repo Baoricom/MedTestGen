@@ -54,23 +54,23 @@ Scope, PRD, specification and mappings are approved. Stage 4-spec is complete. N
 ## Hands-on Checkpoints
 
 - [x] Stage 2 review accepted by learner based on the 84-test report; learner authorized stages 3–4. No hands-on execution by the learner is claimed.
-- [ ] Final kick-the-tires exploration and feedback completed — after slice 4.
+- [x] Final MVP review accepted by learner based on the 108-test and completed browser-workflow report. No hands-on execution by the learner is claimed.
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship.
+- [x] Final review complete — on 2026-10-22 the learner approved the completed MVP and explicitly authorized `6-ship`; no additional fixes were requested.
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — trace one Generate Dataset action through scenario, validation and export policy using actual finished code.
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate.
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse.
+- [x] Learning activity complete — an evidence-based reference route traces Generate Dataset through the browser, API, canonical pipeline, atomic promotion and backend export policy using actual finished symbols.
+- [x] Optional edit and transfer reflection addressed — no incidental product edit was needed during the final approved review; the reusable practice is captured in the map without claiming a personal reflection.
+- [x] `devpost/app-map.html` generated from finished code and checked for the named paths, symbols, offline use and keyboard-readable structure.
 
-Activity and evidence: Pending implementation and learner review.
-Route and stops: To be selected from actual implemented symbols.
-Edit outcome: Not yet offered.
-Reflection: Not yet offered; personal reflection belongs in the ignored learner profile.
-Activity mode: Planned live app and code walkthrough after final revisions.
+Activity and evidence: Evidence-based recap after the learner's final MVP approval; the implementation and its 108-test verification report were already reviewed. No claim of learner hands-on execution is made.
+Route and stops: `static/app.js > generate()` and `renderDataset()`; `pipeline.py > build_dataset()`; `store.py > finish()` and `download()` with `export.py > eligible()`.
+Edit outcome: Not applicable; the approved scope and implementation required no incidental change.
+Reflection: Not supplied. The map records a factual practice to reuse: express a safety requirement as a backend predicate and test the direct bypass path.
+Activity mode: Concise reference route aligned with FAST mode and the request to proceed to shipping.
 
 ## Revisions
 

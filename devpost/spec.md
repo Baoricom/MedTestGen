@@ -38,8 +38,9 @@ Python standard-library BytesIO, zipfile, secrets, uuid, tempfile, subprocess, t
 Proposed delivery is a local browser app on the learner's Windows machine. Run one worker on loopback. Public hosting is not part of this specification. These are planned commands, usable after 5-build creates the referenced files:
 
 ```powershell
-Set-Location 'C:\Projects\MedTestGen'
-py -3.10 -m venv .venv
+Set-Location .\MedTestGen
+python -c "import struct, sys; assert sys.version_info[:2] == (3, 10) and struct.calcsize('P') == 8"
+python -m venv .venv
 & .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 & .\.venv\Scripts\python.exe -m pip check
 & .\.venv\Scripts\python.exe -m pytest

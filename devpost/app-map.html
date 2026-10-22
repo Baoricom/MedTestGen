@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MedTestGen App Map</title>
+  <style>
+    :root { color-scheme: light; --ink:#172033; --muted:#5d6678; --line:#d8deea; --blue:#2757d7; --soft:#f5f7fb; --green:#16724d; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:#fff; }
+    main { width:min(980px,calc(100% - 32px)); margin:32px auto 64px; }
+    h1,h2 { line-height:1.2; }
+    h1 { margin-bottom:6px; }
+    h2 { margin-top:34px; font-size:1.25rem; }
+    .lede,.meta { color:var(--muted); }
+    .flow { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:22px 0; }
+    .node { min-height:130px; padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--soft); position:relative; }
+    .node:not(:last-child)::after { content:"→"; position:absolute; right:-20px; top:48px; z-index:2; color:var(--blue); font-size:24px; font-weight:700; }
+    .node strong { display:block; margin-bottom:8px; color:var(--blue); }
+    code { padding:.12em .35em; border-radius:5px; background:#edf1f7; font-size:.92em; }
+    ol { padding-left:1.35rem; }
+    li { margin:.7rem 0; }
+    .callout { padding:16px 18px; border-left:4px solid var(--green); background:#f1f8f5; }
+    a { color:var(--blue); }
+    kbd { padding:2px 6px; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; background:#fff; }
+    @media (max-width:760px) { .flow { grid-template-columns:1fr; } .node { min-height:auto; } .node:not(:last-child)::after { content:"↓"; right:auto; left:50%; top:auto; bottom:-25px; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>MedTestGen app map</h1>
+  <p class="lede">A compact reference for the finished proof of concept: one synthetic CT order becomes linked DICOM CT, HL7 ORM^O01 and FHIR R4 output, then passes backend-controlled validation before ZIP export.</p>
+
+  <h2>Generate Dataset: one action through the system</h2>
+  <div class="flow" role="list" aria-label="Generate Dataset request flow">
+    <div class="node" role="listitem"><strong>1. Browser</strong><code>medtestgen/static/app.js</code><br><code>generate()</code> sends the prefilled form, session revision and request ID.</div>
+    <div class="node" role="listitem"><strong>2. API + candidate</strong><code>medtestgen/main.py</code><br><code>generate()</code> obtains a store ticket and calls <code>build_dataset()</code>.</div>
+    <div class="node" role="listitem"><strong>3. Generate + validate</strong><code>medtestgen/pipeline.py</code><br>DICOM, HL7 and FHIR are built from one scenario; mandatory and external checks produce the report.</div>
+    <div class="node" role="listitem"><strong>4. Promote + export</strong><code>medtestgen/store.py</code> and <code>export.py</code><br><code>finish()</code> promotes only eligible data; <code>download()</code> rechecks every export gate.</div>
+  </div>
+
+  <h2>Reference route</h2>
+  <ol>
+    <li><strong>Input and visible result.</strong> Open <code>medtestgen/static/app.js</code> and find <code>generate(event)</code>, then <code>renderDataset(data)</code>. These functions connect the button to the API and display the real validation states without converting <em>NOT VERIFIED</em> into <em>PASSED</em>.</li>
+    <li><strong>Canonical generation and evidence.</strong> Open <code>medtestgen/pipeline.py</code> and find <code>build_dataset()</code>. It creates all three standards from one scenario, performs readback, HL7, FHIR, consistency and per-instance <code>dciodvfy</code> checks, then prepares the ZIP in memory.</li>
+    <li><strong>Atomic replacement and backend enforcement.</strong> Open <code>medtestgen/store.py</code> and find <code>finish()</code> and <code>download()</code>; then inspect <code>eligible()</code> in <code>medtestgen/export.py</code>. The active dataset pointer changes only after successful generation and validation, and direct ZIP requests cannot bypass the same policy.</li>
+  </ol>
+
+  <h2>To change this, start here</h2>
+  <ul>
+    <li>CT pixels and required attributes: <code>medtestgen/generators/dicom_ct.py</code> → <code>generate_ct()</code>.</li>
+    <li>DICOM/HL7/FHIR identifier mappings: <code>medtestgen/models.py</code>, the three files under <code>medtestgen/generators/</code>, and <code>devpost/mappings.md</code>.</li>
+    <li>Validation and ZIP authorization: <code>medtestgen/validation/</code> and <code>medtestgen/export.py</code> → <code>eligible()</code>.</li>
+    <li>TTL, memory limits and concurrency: <code>medtestgen/config.py</code> and <code>medtestgen/store.py</code>.</li>
+    <li>Labels, layout and previews: <code>medtestgen/static/index.html</code>, <code>styles.css</code> and <code>app.js</code>.</li>
+  </ul>
+
+  <h2>A practice to reuse</h2>
+  <div class="callout">Turn a safety rule into an observable backend predicate and test its bypass path. Here, the approved rule “Never silently export data that failed mandatory validation” is implemented by <code>eligible()</code> and exercised through direct ZIP API tests in <code>tests/test_api_export.py</code>. The same pattern applies to permissions, payments or any workflow where disabling a button alone is insufficient.</div>
+
+  <h2>Run it again</h2>
+  <p>From PowerShell in the repository:</p>
+  <pre><code>.\.venv\Scripts\Activate.ps1
+python -m uvicorn medtestgen.main:app --host 127.0.0.1 --port 8000 --workers 1</code></pre>
+  <p>Open <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>. Run tests with <code>python -m pytest -q</code>.</p>
+  <p class="meta">Map source snapshot: commit <code>84e3900</code>. This map can drift after later code changes; verify the named symbols against the current source.</p>
+</main>
+</body>
+</html>

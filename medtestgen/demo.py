@@ -1,4 +1,4 @@
-"""Stage 2 live demonstration; generated objects remain in RAM."""
+"""In-memory linked-standard and validation diagnostic."""
 import argparse
 import json
 import tracemalloc
@@ -31,7 +31,7 @@ def generate_demo(count=5):
         'study_uid':scenario.study_uid,'series_uid':scenario.series_uid,
         'artifact_bytes':sum(map(len,dicom))+len(hl7)+len(fhir),
         'mandatory':mandatory,'external_status':aggregate,'external_instances':external,
-        'limitations':['No ZIP or web API implemented yet; no export authorization is claimed.',
+        'limitations':['This CLI diagnostic does not exercise the browser or ZIP API; use the web workflow for export.',
             'Independent validator success is not universal DICOM compatibility.']}
     return report,hl7,fhir
 
