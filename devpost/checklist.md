@@ -5,7 +5,7 @@ status: approved
 
 # MedTestGen Build Checklist
 
-Build mode: fast — explicitly approved. Continue automatically after slice 1; stop after slice 2 for learner feedback before slices 3–4.
+Build mode: fast — explicitly approved. Stages 1–2 accepted. Continue stages 3–4; stop for final learner review after the completed local end-to-end demonstration.
 
 Scope, PRD, specification and mappings are approved. Stage 4-spec is complete. No application implementation is claimed by this checklist.
 
@@ -31,7 +31,7 @@ Scope, PRD, specification and mappings are approved. Stage 4-spec is complete. N
   Learner check: Inspect one scenario's DICOM metadata, ORM PID/ORC/OBR and FHIR identifiers/references; confirm the documented local mapping represents the intended test order.
   Commit: `Generate linked ORM and FHIR R4 with consistency checks`
 
-- [ ] **3. Retrieve and export only eligible datasets through the API**
+- [x] **3. Retrieve and export only eligible datasets through the API**
   Becomes usable: The local API generates, retains, restores and exports a complete validated ZIP while preserving a previous valid result on failed replacement.
   Why now: Applies the established validation results to the most consequential behavior: backend-controlled export and safe replacement.
   PRD ref: `prd.md > ZIP Export and Enforcement`, `prd.md > Atomic Replacement and Diagnostic Candidates`, `prd.md > States and Boundaries`
@@ -53,7 +53,7 @@ Scope, PRD, specification and mappings are approved. Stage 4-spec is complete. N
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after slice 2, inspect the linked three-standard scenario before completing the API/UI. In learn mode, run each slice's learner check as well.
+- [x] Stage 2 review accepted by learner based on the 84-test report; learner authorized stages 3–4. No hands-on execution by the learner is claimed.
 - [ ] Final kick-the-tires exploration and feedback completed — after slice 4.
 
 ## Final Review
@@ -72,4 +72,7 @@ Edit outcome: Not yet offered.
 Reflection: Not yet offered; personal reflection belongs in the ignored learner profile.
 Activity mode: Planned live app and code walkthrough after final revisions.
 
-## Revisions- hl7apy 1.3.5 treats ORM order-detail alternatives as simultaneously required. Narrow its reference choice to the approved OBR branch before validation; preserve group/field validation and add missing-OBR/procedure regressions. No stack, output or scope change.
+## Revisions
+
+- hl7apy 1.3.5 treats ORM order-detail alternatives as simultaneously required. Narrow its reference choice to the approved OBR branch before validation; preserve group/field validation and add missing-OBR/procedure regressions. No stack, output or scope change.
+- HTTP payload leases are released by a response wrapper in `finally`, including send failures. Independent review caught an obsolete `BackgroundTask` path before the Stage 3 commit; the corrected path has API and accounting regression coverage.

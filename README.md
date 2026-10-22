@@ -40,3 +40,9 @@ This creates five CT instances, one ORM^O01 and one FHIR R4 collection Bundle in
 For exact environment reproduction use `python -m pip install -r requirements-lock.txt` inside the project venv. The lock includes the qualified optional validator and test tools.
 
 HL7 validation uses hl7apy's original field/group definitions with the order-detail choice narrowed to OBR. hl7apy 1.3.5 incorrectly validates every alternative as required; the local profile corrects this without adding unrelated order segments. Missing OBR and missing procedure remain test failures.
+
+## Stage 3 API
+
+The backend now retains datasets in RAM for 30 minutes, enforces atomic replacement and rechecks validation before every ZIP response. The final browser entry point is added in Stage 4. API tests use FastAPI's in-process client; generated ZIP files are not written to the project.
+
+The application must run as one Uvicorn worker. Multiple workers would create separate RAM stores and are outside the approved MVP architecture.
